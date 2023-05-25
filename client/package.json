@@ -10,12 +10,16 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@types/dom-mediacapture-record": "^1.0.16",
     "bootstrap": "^5.2.3",
     "firebase": "^9.20.0",
     "react": "^18.2.0",
     "react-bootstrap": "^2.7.4",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.10.0"
+    "react-media-recorder": "^1.6.6",
+    "react-player": "^2.12.0",
+    "react-router-dom": "^6.10.0",
+    "react-webcam": "^7.0.1"
   },
   "devDependencies": {
     "@types/react": "^18.0.28",

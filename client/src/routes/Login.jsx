@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/authContext";
 import { resultOpenCV } from "../openCV/openCV";
 import { Alert } from "../components/Alert";
+import Webcam from "react-webcam";
 
 export const Login = () => {
   const [user, setUser] = useState({
@@ -13,6 +14,27 @@ export const Login = () => {
   const { login, loginWithGoogle, resetPassword } = useAuth();
   const [error, setError] = useState("");
   const navigate = useNavigate();
+
+  const webcamRef = useRef(null);
+  const [capturing, setCapturing] = useState(false);
+  const [capturedImage, setCapturedImage] = useState(null);
+  const [firstCapture, setFirstCapture] = useState(true);
+
+  const videoConstraints = {
+    width: 400,
+    height: 300,
+    facingMode: "user",
+  };
+
+  const handleCapture = () => {
+    if (capturing) {
+      const imageSrc = webcamRef.current.getScreenshot();
+      setUser({ ...user, video: imageSrc });
+      setCapturedImage(imageSrc);
+      if (firstCapture) setFirstCapture(false); // add this line
+    }
+    setCapturing(!capturing);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -129,6 +151,45 @@ export const Login = () => {
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             placeholder="*************"
           />
+        </div>
+
+        <div className="mb-4">
+          <label
+            htmlFor="video"
+            className="block text-gray-700 text-sm font-bold mb-2"
+          >
+            Video
+          </label>
+          <div className="relative">
+            {capturing ? (
+              <Webcam
+                audio={false}
+                height={300}
+                ref={webcamRef}
+                screenshotFormat="image/jpeg"
+                width={400}
+                videoConstraints={videoConstraints}
+              />
+            ) : (
+              capturedImage && (
+                <img
+                  src={capturedImage}
+                  alt="captured"
+                  style={{ width: "400px", height: "300px" }}
+                />
+              )
+            )}
+            <button
+              onClick={handleCapture}
+              className="absolute bottom-0 right-0 mb-2 mr-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline"
+            >
+              {firstCapture
+                ? "Capturar"
+                : capturing
+                ? "Capturar"
+                : "Volver a capturar"}
+            </button>
+          </div>
         </div>
 
         <div className="flex items-center justify-between">
