@@ -3,7 +3,7 @@ from firebase_admin import credentials
 from firebase_admin import auth
 
 cred = credentials.Certificate(
-    "banpapaya-app-firebase-adminsdk-9g0ud-46040c62ea.json")
+    "banpapaya-app-firebase-adminsdk-9g0ud-9bcafa0782.json")
 firebase_admin.initialize_app(cred)
 
 routes = {'fbAuth': '/api/firebase/auth/',
