@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/authContext";
-import { resultTensorFlow } from "../TensorFlow/DjangoServer";
+import { resultOpenCV } from "../openCV/openCV";
 import { Alert } from "../components/Alert";
 
 export const Login = () => {
@@ -19,7 +19,7 @@ export const Login = () => {
     setError("");
 
     try {
-      const result = await resultTensorFlow(user.email);
+      const result = await resultOpenCV(user.email);
       const data = await result.json();
       console.log(data);
       if (data) {

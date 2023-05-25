@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from getFirebase import routes, getValidTensorFlow
+from getFirebase import routes, getValidOpenCV
 
 app = FastAPI()
 
@@ -23,7 +23,7 @@ def index():
     return salida
 
 
-@app.get(routes['fbTensorFlow']+'{email}')
-def getTensorFlow(email):
-    salida = getValidTensorFlow(email)
+@app.get(routes['fbOpenCV']+'{email}')
+def getOpenCV(email):
+    salida = getValidOpenCV(email)
     return salida
