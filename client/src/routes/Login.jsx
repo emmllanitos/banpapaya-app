@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/authContext";
 import { resultOpenCV } from "../openCV/openCV";
@@ -21,35 +21,57 @@ export const Login = () => {
   const [firstCapture, setFirstCapture] = useState(true);
 
   const videoConstraints = {
-    width: 400,
-    height: 300,
+    width: 500,
+    height: 500,
     facingMode: "user",
   };
 
-  const handleCapture = () => {
+  const handleCapture = (e) => {
+    e.preventDefault();
     if (capturing) {
       const imageSrc = webcamRef.current.getScreenshot();
       setUser({ ...user, video: imageSrc });
       setCapturedImage(imageSrc);
-      if (firstCapture) setFirstCapture(false); // add this line
+      //console.log(capturedImage);
+      if (firstCapture) setFirstCapture(false);
     }
     setCapturing(!capturing);
   };
 
+  const dataURLtoBlob = (dataurl) => {
+    let arr = dataurl.split(","),
+      mime = arr[0].match(/:(.*?);/)[1],
+      bstr = atob(arr[1]),
+      n = bstr.length,
+      u8arr = new Uint8Array(n);
+    while (n--) {
+      u8arr[n] = bstr.charCodeAt(n);
+    }
+    return new Blob([u8arr], { type: mime });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const formData = new FormData();
+    formData.append("email", user.email);
+    const blob = dataURLtoBlob(capturedImage);
+    const emailName = user.email.split("@")[0];
+    const file = new File([blob], `login_${emailName}.jpeg`, {
+      type: "image/jpeg",
+    });
+    formData.append("file", file);
     setError("");
 
     try {
-      const result = await resultOpenCV(user.email);
-      const data = await result.json();
-      console.log(data);
-      if (data) {
-        console.log(data);
+      const result = await resultOpenCV(formData);
+      console.log(result.status);
+      if (result.status === "success") {
+        console.log(result.status);
         await login(user.email, user.password);
         navigate("/profile");
       } else {
-        window.alert("Falla en reconocimento facial...");
+        window.alert("No se encuentra, por favor registrese...");
       }
     } catch (error) {
       switch (error.code) {
@@ -164,10 +186,10 @@ export const Login = () => {
             {capturing ? (
               <Webcam
                 audio={false}
-                height={300}
+                height={500}
                 ref={webcamRef}
                 screenshotFormat="image/jpeg"
-                width={400}
+                width={500}
                 videoConstraints={videoConstraints}
               />
             ) : (
@@ -175,11 +197,12 @@ export const Login = () => {
                 <img
                   src={capturedImage}
                   alt="captured"
-                  style={{ width: "400px", height: "300px" }}
+                  style={{ width: "500px", height: "500px" }}
                 />
               )
             )}
             <button
+              type="button"
               onClick={handleCapture}
               className="absolute bottom-0 right-0 mb-2 mr-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline"
             >
