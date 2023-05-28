@@ -7,8 +7,6 @@ import Webcam from "react-webcam";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
 
 export const Login = () => {
   const [user, setUser] = useState({
@@ -188,7 +186,11 @@ export const Login = () => {
               onClick={handleCapture}
               className="absolute bottom-0 right-0 mb-2 mr-2"
             >
-              {firstCapture ? "Capturar" : capturing ? "Capturar" : "Volver a capturar"}
+              {firstCapture
+                ? "Capturar"
+                : capturing
+                ? "Capturar"
+                : "Volver a capturar"}
             </Button>
           </div>
         </Form.Group>

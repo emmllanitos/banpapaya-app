@@ -6,22 +6,35 @@ import { Register } from "./routes/Register";
 import { Profile } from "./routes/Profile";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { AuthProvider } from "./context/authContext";
-import "./stylesheets/main.css";
-import "bootstrap/dist/css/bootstrap.min.css";
 import { Footer } from "./components/Footer";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "./stylesheets/main.css";
 
 function App() {
   return (
     <AuthProvider>
       <Navbar />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="login" element={<Login />} />
-        <Route path="register" element={<Register />} />
-        <Route path="profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
-        <Route path="*" element={<Navigate replace to="/" />} />
-      </Routes>
-      <Footer />
+      <div
+        style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}
+      >
+        <div style={{ flex: "1" }}>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="login" element={<Login />} />
+            <Route path="register" element={<Register />} />
+            <Route
+              path="profile"
+              element={
+                <ProtectedRoute>
+                  <Profile />
+                </ProtectedRoute>
+              }
+            />
+            <Route path="*" element={<Navigate replace to="/" />} />
+          </Routes>
+        </div>
+        <Footer />
+      </div>
     </AuthProvider>
   );
 }

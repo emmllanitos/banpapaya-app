@@ -4,6 +4,7 @@ import { useAuth } from "../context/authContext";
 import Webcam from "react-webcam";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
+import Container from "react-bootstrap/Container";
 
 export const Register = () => {
   const { signup } = useAuth();
@@ -119,77 +120,79 @@ export const Register = () => {
   };
 
   return (
-    <div className="w-full max-w-xs m-auto text-black">
-      {error}
+    <Container>
+      <div className="w-full max-w-xs m-auto text-black">
+        {error}
 
-      <Form
-        onSubmit={handleSubmit}
-        className="bg-white shadow-md rounded px-8 pt-6 pb-6 mb-4"
-      >
-        <Form.Group controlId="email">
-          <Form.Label>Correo electrónico</Form.Label>
-          <Form.Control
-            type="email"
-            onChange={(e) => setUser({ ...user, email: e.target.value })}
-            placeholder="SuCorreo@SuDominio.com"
-          />
-        </Form.Group>
+        <Form
+          onSubmit={handleSubmit}
+          className="bg-white shadow-md rounded px-8 pt-6 pb-6 mb-4"
+        >
+          <Form.Group controlId="email">
+            <Form.Label>Correo electrónico</Form.Label>
+            <Form.Control
+              type="email"
+              onChange={(e) => setUser({ ...user, email: e.target.value })}
+              placeholder="SuCorreo@SuDominio.com"
+            />
+          </Form.Group>
 
-        <Form.Group controlId="password">
-          <Form.Label>Contraseña</Form.Label>
-          <Form.Control
-            type="password"
-            onChange={(e) => setUser({ ...user, password: e.target.value })}
-            placeholder="*************"
-          />
-        </Form.Group>
+          <Form.Group controlId="password">
+            <Form.Label>Contraseña</Form.Label>
+            <Form.Control
+              type="password"
+              onChange={(e) => setUser({ ...user, password: e.target.value })}
+              placeholder="*************"
+            />
+          </Form.Group>
 
-        <Form.Group>
-          <Form.Label>Camara</Form.Label>
-          <div className="relative">
-            {capturing ? (
-              <Webcam
-                audio={false}
-                height={500}
-                ref={webcamRef}
-                screenshotFormat="image/jpeg"
-                width={500}
-                videoConstraints={videoConstraints}
-              />
-            ) : (
-              capturedImage && (
-                <img
-                  src={capturedImage}
-                  alt="captured"
-                  style={{ width: "500px", height: "500px" }}
+          <Form.Group>
+            <Form.Label>Camara</Form.Label>
+            <div className="relative">
+              {capturing ? (
+                <Webcam
+                  audio={false}
+                  height={500}
+                  ref={webcamRef}
+                  screenshotFormat="image/jpeg"
+                  width={500}
+                  videoConstraints={videoConstraints}
                 />
-              )
-            )}
-            <Button
-              onClick={handleCapture}
-              className="absolute bottom-0 right-0 mb-2 mr-2"
-              variant="primary"
-            >
-              {firstCapture
-                ? "Capturar"
-                : capturing
-                ? "Capturar"
-                : "Volver a capturar"}
-            </Button>
-          </div>
-        </Form.Group>
+              ) : (
+                capturedImage && (
+                  <img
+                    src={capturedImage}
+                    alt="captured"
+                    style={{ width: "500px", height: "500px" }}
+                  />
+                )
+              )}
+              <Button
+                onClick={handleCapture}
+                className="absolute bottom-0 right-0 mb-2 mr-2"
+                variant="primary"
+              >
+                {firstCapture
+                  ? "Capturar"
+                  : capturing
+                  ? "Capturar"
+                  : "Volver a capturar"}
+              </Button>
+            </div>
+          </Form.Group>
 
-        <Button variant="primary" type="submit">
-          Registrarse
-        </Button>
-      </Form>
+          <Button variant="primary" type="submit">
+            Registrarse
+          </Button>
+        </Form>
 
-      <p className="my-4 text-sm flex justify-between px-3">
-        Ya tienes una cuenta?
-        <Link to="/login" className="text-blue-700 hover:text-blue-900">
-          Iniciar sesión
-        </Link>
-      </p>
-    </div>
+        <p className="my-4 text-sm flex justify-between px-3">
+          Ya tienes una cuenta?
+          <Link to="/login" className="text-blue-700 hover:text-blue-900">
+            Iniciar sesión
+          </Link>
+        </p>
+      </div>
+    </Container>
   );
 };

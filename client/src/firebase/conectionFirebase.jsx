@@ -7,6 +7,16 @@ import { getAuth } from "firebase/auth";
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyC52LYmTm_g4sMN5lvBk5tCNbSFSyWiZ0c",
+  authDomain: "banpapaya-app.firebaseapp.com",
+  databaseURL: "https://banpapaya-app-default-rtdb.firebaseio.com",
+  projectId: "banpapaya-app",
+  storageBucket: "banpapaya-app.appspot.com",
+  messagingSenderId: "855300073015",
+  appId: "1:855300073015:web:ed253c28dcfd6e6bb901b2",
+  measurementId: "G-HSFZS7P6LC",
+};
 
 // Initialize Firebase
 export const app = initializeApp(firebaseConfig);
