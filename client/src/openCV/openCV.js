@@ -1,6 +1,10 @@
-const API_URL = "http://127.0.0.1:8000/api/openCV/";
+export const resultOpenCV = async (formData) => {
+  const result = await fetch("http://127.0.0.1:8000/api/filelogin/", {
+    method: "POST",
+    body: formData,
+  });
 
-export const resultOpenCV = async (email) => {
-  return await fetch(API_URL + email);
-  //return await fetch(`${API_URL}${email}`);
+  const data = await result.json();
+
+  return data;
 };

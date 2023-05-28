@@ -1,9 +1,14 @@
-import { useState, useRef } from "react";
+import React, { useState, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/authContext";
 import { resultOpenCV } from "../openCV/openCV";
 import { Alert } from "../components/Alert";
 import Webcam from "react-webcam";
+import Form from "react-bootstrap/Form";
+import Button from "react-bootstrap/Button";
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
 
 export const Login = () => {
   const [user, setUser] = useState({
@@ -32,7 +37,6 @@ export const Login = () => {
       const imageSrc = webcamRef.current.getScreenshot();
       setUser({ ...user, video: imageSrc });
       setCapturedImage(imageSrc);
-      //console.log(capturedImage);
       if (firstCapture) setFirstCapture(false);
     }
     setCapturing(!capturing);
@@ -65,18 +69,16 @@ export const Login = () => {
 
     try {
       const result = await resultOpenCV(formData);
-      console.log(result.status);
       if (result.status === "success") {
-        console.log(result.status);
         await login(user.email, user.password);
         navigate("/profile");
       } else {
-        window.alert("No se encuentra, por favor registrese...");
+        window.alert("No se encuentra, por favor regístrese...");
       }
     } catch (error) {
       switch (error.code) {
         case "auth/invalid-email":
-          setError("Correo invalido");
+          setError("Correo inválido");
           break;
         case "auth/internal-error":
           setError("Ingrese la contraseña");
@@ -117,7 +119,7 @@ export const Login = () => {
     } catch (error) {
       switch (error.code) {
         case "auth/invalid-email":
-          setError("Correo invalido");
+          setError("Correo inválido");
           break;
         case "auth/internal-error":
           setError("Ingrese la contraseña");
@@ -135,53 +137,32 @@ export const Login = () => {
   };
 
   return (
-    <div>
-      {error}
+    <Container>
+      {error && <Alert variant="danger">{error}</Alert>}
 
-      <form
-        onSubmit={handleSubmit}
-        className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
-      >
-        <div className="mb-4">
-          <label
-            htmlFor="email"
-            className="block text-gray-700 text-sm font-bold mb-2"
-          >
-            Correo electrónico
-          </label>
-          <input
+      <Form onSubmit={handleSubmit} className="my-5">
+        <Form.Group controlId="email">
+          <Form.Label>Correo electrónico</Form.Label>
+          <Form.Control
             type="email"
             name="email"
-            id="email"
             onChange={handleChange}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             placeholder="SuCorreo@SuDominio.com"
           />
-        </div>
-        <div className="mb-4">
-          <label
-            htmlFor="password"
-            className="block text-gray-700 text-sm font-bold mb-2"
-          >
-            Contraseña
-          </label>
-          <input
+        </Form.Group>
+
+        <Form.Group controlId="password">
+          <Form.Label>Contraseña</Form.Label>
+          <Form.Control
             type="password"
             name="password"
-            id="password"
             onChange={handleChange}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             placeholder="*************"
           />
-        </div>
+        </Form.Group>
 
-        <div className="mb-4">
-          <label
-            htmlFor="video"
-            className="block text-gray-700 text-sm font-bold mb-2"
-          >
-            Video
-          </label>
+        <Form.Group controlId="video" className="mb-4">
+          <Form.Label>Video</Form.Label>
           <div className="relative">
             {capturing ? (
               <Webcam
@@ -201,48 +182,45 @@ export const Login = () => {
                 />
               )
             )}
-            <button
+            <Button
+              variant="primary"
               type="button"
               onClick={handleCapture}
-              className="absolute bottom-0 right-0 mb-2 mr-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline"
+              className="absolute bottom-0 right-0 mb-2 mr-2"
             >
-              {firstCapture
-                ? "Capturar"
-                : capturing
-                ? "Capturar"
-                : "Volver a capturar"}
-            </button>
+              {firstCapture ? "Capturar" : capturing ? "Capturar" : "Volver a capturar"}
+            </Button>
           </div>
-        </div>
+        </Form.Group>
 
-        <div className="flex items-center justify-between">
-          <button
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-            type="submit"
-          >
+        <div className="d-flex justify-content-between align-items-center">
+          <Button variant="primary" type="submit">
             Ingresar
-          </button>
+          </Button>
           <a
-            className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800"
             href="#!"
             onClick={handleResetPassword}
+            className="text-blue-500 hover:text-blue-800"
           >
-            Olvido la contraseña?
+            ¿Olvidaste la contraseña?
           </a>
         </div>
-      </form>
-      <button
+      </Form>
+
+      <Button
+        variant="light"
         onClick={handleGoogleSignin}
-        className="bg-slate-50 hover:bg-slate-200 text-black  shadow rounded border-2 border-gray-300 py-2 px-4 w-full"
+        className="shadow rounded"
       >
         Iniciar sesión con Google
-      </button>
-      <p className="my-4 text-sm flex justify-between px-3">
-        No tienes una cuenta?
+      </Button>
+
+      <p className="my-4 text-sm text-center">
+        ¿No tienes una cuenta?{" "}
         <Link to="/register" className="text-blue-700 hover:text-blue-900">
           Registrarse
         </Link>
       </p>
-    </div>
+    </Container>
   );
 };

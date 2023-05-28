@@ -2,6 +2,8 @@ import { useState, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/authContext";
 import Webcam from "react-webcam";
+import Form from "react-bootstrap/Form";
+import Button from "react-bootstrap/Button";
 
 export const Register = () => {
   const { signup } = useAuth();
@@ -39,9 +41,7 @@ export const Register = () => {
         await new Promise((resolve) => setTimeout(resolve, 100)); // Espera 100ms antes de tomar la siguiente captura de pantalla.
         let imageSrc = webcamRef.current.getScreenshot(); // Toma la captura de pantalla.
         arrayImages.push(imageSrc); // Añade la captura de pantalla al array de imágenes.
-        console.log(imageSrc);
         apollo++;
-        console.log(apollo);
 
         // Cuando se haya tomado la captura de pantalla número 100...
         if (apollo === 100) {
@@ -93,7 +93,6 @@ export const Register = () => {
       const data = await result.json();
 
       if (data.status === "success") {
-        console.log(data.status);
         await signup(user.email, user.password);
         navigate("/");
       } else {
@@ -123,47 +122,30 @@ export const Register = () => {
     <div className="w-full max-w-xs m-auto text-black">
       {error}
 
-      <form
+      <Form
         onSubmit={handleSubmit}
         className="bg-white shadow-md rounded px-8 pt-6 pb-6 mb-4"
       >
-        <div className="mb-4">
-          <label
-            htmlFor="email"
-            className="block text-gray-700 text-sm font-bold mb-2"
-          >
-            Correo electrónico
-          </label>
-          <input
+        <Form.Group controlId="email">
+          <Form.Label>Correo electrónico</Form.Label>
+          <Form.Control
             type="email"
             onChange={(e) => setUser({ ...user, email: e.target.value })}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             placeholder="SuCorreo@SuDominio.com"
           />
-        </div>
+        </Form.Group>
 
-        <div className="mb-4">
-          <label
-            htmlFor="password"
-            className="block text-gray-700 text-sm font-bold mb-2"
-          >
-            Contraseña
-          </label>
-          <input
+        <Form.Group controlId="password">
+          <Form.Label>Contraseña</Form.Label>
+          <Form.Control
             type="password"
             onChange={(e) => setUser({ ...user, password: e.target.value })}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             placeholder="*************"
           />
-        </div>
+        </Form.Group>
 
-        <div className="mb-4">
-          <label
-            htmlFor="video"
-            className="block text-gray-700 text-sm font-bold mb-2"
-          >
-            Camara
-          </label>
+        <Form.Group>
+          <Form.Label>Camara</Form.Label>
           <div className="relative">
             {capturing ? (
               <Webcam
@@ -183,23 +165,25 @@ export const Register = () => {
                 />
               )
             )}
-            <button
-              onClick={(e) => handleCapture(e)}
-              className="absolute bottom-0 right-0 mb-2 mr-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline"
+            <Button
+              onClick={handleCapture}
+              className="absolute bottom-0 right-0 mb-2 mr-2"
+              variant="primary"
             >
               {firstCapture
                 ? "Capturar"
                 : capturing
                 ? "Capturar"
                 : "Volver a capturar"}
-            </button>
+            </Button>
           </div>
-        </div>
+        </Form.Group>
 
-        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+        <Button variant="primary" type="submit">
           Registrarse
-        </button>
-      </form>
+        </Button>
+      </Form>
+
       <p className="my-4 text-sm flex justify-between px-3">
         Ya tienes una cuenta?
         <Link to="/login" className="text-blue-700 hover:text-blue-900">
