@@ -1,7 +1,6 @@
 from fastapi import FastAPI, UploadFile, File, Form, HTTPException
 import os
 from fastapi.middleware.cors import CORSMiddleware
-from getFirebase import getValidOpenCV
 from getFace import procesar_imagenes
 from getEntrenar import train_model
 from getComparaImagen import predict_person
@@ -46,13 +45,6 @@ def index():
         'age': 2023
     }
 
-    return salida
-
-
-@app.get(routes['fbOpenCV']+'{email}')
-def getOpenCV(email):
-    # Endpoint para obtener datos de OpenCV válidos
-    salida = getValidOpenCV(email)
     return salida
 
 
